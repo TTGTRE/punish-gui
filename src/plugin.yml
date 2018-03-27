@@ -1,0 +1,6 @@
+main: logan.punishgui.PunishPlugin
+name: PunishGUI
+version: 1
+author: Tre
+commands:
+    testgui:
