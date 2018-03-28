@@ -1,5 +1,6 @@
 package logan.punishgui;
 
+import java.util.Arrays;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -20,6 +21,12 @@ public class MenuItem {
         setName(this.name, this.itemStack);
     }
 
+    public void setLore(String... lore) {
+        ItemMeta meta = itemStack.getItemMeta();
+        meta.setLore(Arrays.asList(lore));
+        itemStack.setItemMeta(meta);
+    }
+    
     public String getName() {
         return name;
     }

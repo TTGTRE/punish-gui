@@ -19,6 +19,10 @@ public class PunishPlugin extends JavaPlugin {
     private MenuLoader menuLoader;
     private static Essentials essentials;
 
+    public static final String MUTE_PERM = "punishgui.mute";
+    public static final String KICK_PERM = "punishgui.kick";
+    public static final String BAN_PERM = "punishgui.ban";
+
     @Override
     public void onEnable() {
 
@@ -50,41 +54,65 @@ public class PunishPlugin extends JavaPlugin {
         Player player = (Player) sender;
 
         if (label.equalsIgnoreCase("mutegui") && args.length == 1) {
+
+            if (!player.hasPermission(MUTE_PERM)) {
+                player.sendMessage(ChatColor.RED + "No permission.");
+                return true;
+            }
+
             Player punishedPlayer = Bukkit.getPlayer(args[0]);
-            
-            if(Objects.isNull(punishedPlayer)) {
+
+            if (Objects.isNull(punishedPlayer)) {
                 player.sendMessage(ChatColor.RED + "Player not found.");
                 return true;
             }
-            
+
             menuLoader.loadMuteMenu(punishedPlayer, getConfig()).open(player);
+        } else if (args.length != 1) {
+            return false;
         }
 
         if (label.equalsIgnoreCase("kickgui") && args.length == 1) {
+
+            if (!player.hasPermission(KICK_PERM)) {
+                player.sendMessage(ChatColor.RED + "No permission.");
+                return true;
+            }
+
             Player punishedPlayer = Bukkit.getPlayer(args[0]);
-            
-            if(Objects.isNull(punishedPlayer)) {
+
+            if (Objects.isNull(punishedPlayer)) {
                 player.sendMessage(ChatColor.RED + "Player not found.");
                 return true;
             }
-            
+
             menuLoader.loadKickMenu(punishedPlayer, getConfig()).open(player);
+        } else if (args.length != 1) {
+            return false;
         }
 
         if (label.equalsIgnoreCase("bangui") && args.length == 1) {
+
+            if (!player.hasPermission(BAN_PERM)) {
+                player.sendMessage(ChatColor.RED + "No permission.");
+                return true;
+            }
+
             Player punishedPlayer = Bukkit.getPlayer(args[0]);
-            
-            if(Objects.isNull(punishedPlayer)) {
+
+            if (Objects.isNull(punishedPlayer)) {
                 player.sendMessage(ChatColor.RED + "Player not found.");
                 return true;
             }
-            
+
             menuLoader.loadBanMenu(punishedPlayer, getConfig()).open(player);
+        } else if (args.length != 1) {
+            return false;
         }
 
         return true;
     }
-    
+
     public static Essentials getEssentials() {
         return essentials;
     }

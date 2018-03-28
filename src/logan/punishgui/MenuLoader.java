@@ -3,13 +3,13 @@ package logan.punishgui;
 import com.earth2me.essentials.User;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.BanList.Type;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -36,17 +36,20 @@ public class MenuLoader {
             String[] parts = string.split("->");
             String reason = parts[0].trim();
             String timeString = parts[1].trim();
+            final long time = getTime(timeString);
+            final String readableTime = asReadableTime(time);
 
             ItemStack itemStack = new ItemStack(Material.STONE_AXE);
-            MenuItem menuItem = new MenuItem(reason + " -> " + timeString, itemStack);
+            MenuItem menuItem = new MenuItem(ChatColor.GOLD + reason, itemStack);
+            menuItem.setLore(ChatColor.WHITE + asReadableTime(time));
 
-            final long banTime = getTime(timeString);
             menuItem.setOnClick((e) -> {
                 User user = PunishPlugin.getEssentials().getUser(player);
-                LocalDateTime ldt = LocalDateTime.now().plus(banTime, ChronoUnit.MILLIS);
+                LocalDateTime ldt = LocalDateTime.now().plus(time, ChronoUnit.MILLIS);
                 Bukkit.getBanList(Type.NAME).addBan(player.getName(), reason, Date.from(ldt.atZone(ZoneId.systemDefault()).toInstant()), null);
-                player.kickPlayer("Banned: " + reason);
-                e.getPlayer().sendMessage("Banned " + player.getName() + " for " + banTime);
+                player.kickPlayer(ChatColor.RED + "Banned: " + reason);
+                e.getPlayer().sendMessage(ChatColor.GOLD + "Banned " + user.getName() + " for " + readableTime + " for " + reason);
+                e.getPlayer().closeInventory();
             });
 
             menu.addMenuItem(menuItem, slot);
@@ -54,7 +57,7 @@ public class MenuLoader {
             slot++;
 
         }
-        
+
         return menu;
     }
 
@@ -68,12 +71,13 @@ public class MenuLoader {
         int slot = 0;
         for (String reason : stringList) {
 
-            ItemStack itemStack = new ItemStack(Material.BOW);
-            MenuItem menuItem = new MenuItem(reason, itemStack);
+            ItemStack itemStack = new ItemStack(Material.ARROW);
+            MenuItem menuItem = new MenuItem(ChatColor.GOLD + reason, itemStack);
 
             menuItem.setOnClick((e) -> {
                 player.kickPlayer(reason);
-                e.getPlayer().sendMessage("Kicked " + player.getName() + " for " + reason);
+                e.getPlayer().sendMessage(ChatColor.GOLD + "Kicked " + player.getName() + " for " + reason);
+                e.getPlayer().closeInventory();
             });
 
             menu.addMenuItem(menuItem, slot);
@@ -81,7 +85,7 @@ public class MenuLoader {
             slot++;
 
         }
-        
+
         return menu;
     }
 
@@ -98,15 +102,23 @@ public class MenuLoader {
             String[] parts = string.split("->");
             String reason = parts[0].trim();
             String timeString = parts[1].trim();
+            final long time = getTime(timeString);
+            final String readableTime = asReadableTime(time);
+            
+            ItemStack itemStack = new ItemStack(Material.MUSHROOM_SOUP);
+            MenuItem menuItem = new MenuItem(ChatColor.GOLD + reason, itemStack);
+            menuItem.setLore(ChatColor.WHITE + readableTime);
 
-            ItemStack itemStack = new ItemStack(Material.ARROW);
-            MenuItem menuItem = new MenuItem(reason + " -> " + timeString, itemStack);
-
-            final long muteTimeout = getTime(timeString);
             menuItem.setOnClick((e) -> {
                 User user = PunishPlugin.getEssentials().getUser(player);
-                user.setMuteTimeout(muteTimeout);
-                e.getPlayer().sendMessage("Muted " + player.getName() + " for " + muteTimeout);
+                if (!user.getMuted()) {
+                    user.setMuteTimeout(System.currentTimeMillis() + time);
+                    user.setMuted(true);
+                    user.sendMessage(ChatColor.RED + "You have been muted for " + readableTime);
+                }
+                
+                e.getPlayer().sendMessage(ChatColor.GOLD + "Muted " + user.getName() + " for " + readableTime);
+                e.getPlayer().closeInventory();
             });
 
             menu.addMenuItem(menuItem, slot);
@@ -130,8 +142,6 @@ public class MenuLoader {
             int time = Integer.parseInt(match.substring(0, match.length() - 1));
             char timeUnit = match.charAt(match.length() - 1);
 
-            System.out.println("Time: " + time + ", Unit: " + timeUnit);
-
             switch (timeUnit) {
                 case 'd':
                     timeout += TimeUnit.DAYS.toMillis(time);
@@ -152,6 +162,35 @@ public class MenuLoader {
         }
 
         return timeout;
+    }
+
+    private String asReadableTime(long millis) {
+
+        long x = millis / 1000;
+        long seconds = x % 60;
+        x /= 60;
+        long minutes = x % 60;
+        x /= 60;
+        long hours = x % 24;
+        x /= 24;
+        long days = x;
+        
+        StringBuilder builder = new StringBuilder();
+
+        if (days > 0) {
+            builder.append(days).append(" days ");
+        }
+        if (hours > 0) {
+            builder.append(hours).append(" hours ");
+        }
+        if (minutes > 0) {
+            builder.append(minutes).append(" minutes ");
+        }
+        if (seconds > 0) {
+            builder.append(seconds).append(" seconds ");
+        }
+
+        return builder.toString().trim();
     }
 
 }
