@@ -25,6 +25,10 @@ public class ClickHandler implements Listener {
         menuItems.remove(menuItem);
     }
     
+    public static void removeAll() {
+        menuItems.clear();
+    }
+    
     @EventHandler
     public void onInventoryInteract(InventoryClickEvent event) {
         ItemStack item = event.getCurrentItem();

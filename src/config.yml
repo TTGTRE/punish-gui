@@ -1,0 +1,15 @@
+mute:
+- "Mute reason 1 -> 30s"
+- "Mute reason 2 -> 1m"
+- "Mute reason 3 -> 10m"
+- "Mute reason 4 -> 30m"
+
+kick:
+- "Reason 1"
+- "Reason 2"
+- "Reason 3"
+
+ban:
+- "Ban reason 1 -> 10s"
+- "Ban reason 2 -> 20s"
+- "Ban reason 3 -> 30s"

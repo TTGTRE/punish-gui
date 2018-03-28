@@ -1,6 +1,12 @@
 main: logan.punishgui.PunishPlugin
 name: PunishGUI
-version: 1
+version: 1.0
 author: Tre
+depend: [Essentials]
 commands:
-    testgui:
+  mutegui:
+    usage: /mutegui <player>
+  kickgui:
+    usage: /kickgui <player>
+  bangui:
+    usage: /bangui <player>
