@@ -22,7 +22,7 @@ public class PunishPlugin extends JavaPlugin {
     public static final String MUTE_PERM = "punishgui.mute";
     public static final String KICK_PERM = "punishgui.kick";
     public static final String BAN_PERM = "punishgui.ban";
-    public static final String RELOAD_PERM = "punish.reload";
+    public static final String RELOAD_PERM = "punishgui.reload";
 
     @Override
     public void onEnable() {

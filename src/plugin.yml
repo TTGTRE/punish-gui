@@ -18,5 +18,5 @@ commands:
     usage: /bangui <player>
   punishreload:
     description: Reload the punish configuration.
-    permission: punish.reload
+    permission: punishgui.reload
     usage: /punishreload
