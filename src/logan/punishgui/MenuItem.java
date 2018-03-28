@@ -1,6 +1,7 @@
 package logan.punishgui;
 
 import java.util.Arrays;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -17,6 +18,10 @@ public class MenuItem {
     public MenuItem(String name, ItemStack itemStack) {
         this.name = name;
         this.itemStack = itemStack;
+        
+        ItemMeta meta = itemStack.getItemMeta();
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        this.itemStack.setItemMeta(meta);
         
         setName(this.name, this.itemStack);
     }

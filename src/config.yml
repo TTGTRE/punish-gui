@@ -1,8 +1,11 @@
+# s = seconds, m = minutes, h = hours, d = days
+# "->" separates the reason from the duration of the punishment
+# You can append as many reasons for each punishment as you like
+
 mute:
-- "Mute reason 1 -> 30s"
-- "Mute reason 2 -> 1m"
+- "Mute reason 1 -> 1m"
+- "Mute reason 2 -> 5m"
 - "Mute reason 3 -> 10m"
-- "Mute reason 4 -> 30m"
 
 kick:
 - "Reason 1"
@@ -10,6 +13,6 @@ kick:
 - "Reason 3"
 
 ban:
-- "Ban reason 1 -> 10s"
-- "Ban reason 2 -> 20s"
-- "Ban reason 3 -> 30s"
+- "Ban reason 1 -> 1h"
+- "Ban reason 2 -> 1d"
+- "Ban reason 3 -> 7d"

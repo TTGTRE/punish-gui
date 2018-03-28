@@ -5,8 +5,18 @@ author: Tre
 depend: [Essentials]
 commands:
   mutegui:
+    description: Mute a player via GUI
+    permission: punishgui.mute
     usage: /mutegui <player>
   kickgui:
+    description: Kick a player via GUI
+    permission: punishgui.kick
     usage: /kickgui <player>
   bangui:
+    description: Ban a player via GUI
+    permission: punishgui.ban
     usage: /bangui <player>
+  punishreload:
+    description: Reload the punish configuration.
+    permission: punish.reload
+    usage: /punishreload

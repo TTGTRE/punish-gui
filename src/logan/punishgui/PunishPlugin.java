@@ -22,6 +22,7 @@ public class PunishPlugin extends JavaPlugin {
     public static final String MUTE_PERM = "punishgui.mute";
     public static final String KICK_PERM = "punishgui.kick";
     public static final String BAN_PERM = "punishgui.ban";
+    public static final String RELOAD_PERM = "punish.reload";
 
     @Override
     public void onEnable() {
@@ -53,6 +54,19 @@ public class PunishPlugin extends JavaPlugin {
 
         Player player = (Player) sender;
 
+        if (label.equalsIgnoreCase("punishreload")) {
+
+            if (!player.hasPermission(RELOAD_PERM)) {
+                player.sendMessage(ChatColor.RED + "No permission.");
+                return true;
+            }
+
+            reloadConfig();
+
+            player.sendMessage("Reloaded " + getName() + ".");
+            return true;
+        }
+        
         if (label.equalsIgnoreCase("mutegui") && args.length == 1) {
 
             if (!player.hasPermission(MUTE_PERM)) {

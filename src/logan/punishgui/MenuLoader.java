@@ -71,7 +71,7 @@ public class MenuLoader {
         int slot = 0;
         for (String reason : stringList) {
 
-            ItemStack itemStack = new ItemStack(Material.ARROW);
+            ItemStack itemStack = new ItemStack(Material.BOW );
             MenuItem menuItem = new MenuItem(ChatColor.GOLD + reason, itemStack);
 
             menuItem.setOnClick((e) -> {
@@ -115,6 +115,12 @@ public class MenuLoader {
                     user.setMuteTimeout(System.currentTimeMillis() + time);
                     user.setMuted(true);
                     user.sendMessage(ChatColor.RED + "You have been muted for " + readableTime);
+                } else {
+                    
+                    long timeLeft = user.getMuteTimeout() - System.currentTimeMillis();
+                    
+                    e.getPlayer().sendMessage(ChatColor.RED + "That player is already muted. (" + asReadableTime(timeLeft) + " left)");
+                    return;
                 }
                 
                 e.getPlayer().sendMessage(ChatColor.GOLD + "Muted " + user.getName() + " for " + readableTime);
