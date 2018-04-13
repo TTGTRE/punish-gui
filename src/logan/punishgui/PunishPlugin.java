@@ -2,6 +2,7 @@ package logan.punishgui;
 
 import com.earth2me.essentials.Essentials;
 import java.util.Objects;
+import logan.guiapi.Menu;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -23,19 +24,13 @@ public class PunishPlugin extends JavaPlugin {
     public static final String KICK_PERM = "punishgui.kick";
     public static final String BAN_PERM = "punishgui.ban";
     public static final String RELOAD_PERM = "punishgui.reload";
-
+    
     @Override
     public void onEnable() {
-
         saveDefaultConfig();
-
-        menuLoader = new MenuLoader();
-
-        PluginManager manager = getServer().getPluginManager();
-        manager.registerEvents(new ClickHandler(), this);
-
         essentials = (Essentials) Bukkit.getPluginManager().getPlugin("Essentials");
-
+        menuLoader = new MenuLoader(this);
+        
         getLogger().info(getName() + " enabled.");
     }
 
@@ -81,7 +76,8 @@ public class PunishPlugin extends JavaPlugin {
                 return true;
             }
 
-            menuLoader.loadMuteMenu(punishedPlayer, getConfig()).open(player);
+            menuLoader.loadMuteMenu(punishedPlayer, getConfig()).show(player);
+            
         } else if (args.length != 1) {
             return false;
         }
@@ -100,7 +96,8 @@ public class PunishPlugin extends JavaPlugin {
                 return true;
             }
 
-            menuLoader.loadKickMenu(punishedPlayer, getConfig()).open(player);
+            menuLoader.loadKickMenu(punishedPlayer, getConfig()).show(player);
+            
         } else if (args.length != 1) {
             return false;
         }
@@ -119,7 +116,8 @@ public class PunishPlugin extends JavaPlugin {
                 return true;
             }
 
-            menuLoader.loadBanMenu(punishedPlayer, getConfig()).open(player);
+            menuLoader.loadBanMenu(punishedPlayer, getConfig()).show(player);
+            
         } else if (args.length != 1) {
             return false;
         }

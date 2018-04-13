@@ -9,13 +9,17 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import net.md_5.bungee.api.ChatColor;
+import logan.guiapi.Menu;
+import logan.guiapi.MenuItem;
+import logan.guiapi.MenuItemBuilder;
+import logan.guiapi.fill.QuadFill;
 import org.bukkit.BanList.Type;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  *
@@ -23,10 +27,15 @@ import org.bukkit.inventory.ItemStack;
  */
 public class MenuLoader {
 
-    public Menu loadBanMenu(Player player, FileConfiguration config) {
-        ClickHandler.removeAll();
+    private JavaPlugin plugin;
 
-        Menu menu = new Menu("Ban Options");
+    public MenuLoader(JavaPlugin plugin) {
+        this.plugin = plugin;
+    }
+
+    public Menu loadBanMenu(Player player, FileConfiguration config) {
+        Menu menu = new Menu(plugin, "Ban", 3);
+        menu.fill(new QuadFill(7, 8, 1, 14));
 
         List<String> stringList = config.getStringList("ban");
 
@@ -39,11 +48,11 @@ public class MenuLoader {
             final long time = getTime(timeString);
             final String readableTime = asReadableTime(time);
 
-            ItemStack itemStack = new ItemStack(Material.STONE_AXE);
-            MenuItem menuItem = new MenuItem(ChatColor.GOLD + reason, itemStack);
-            menuItem.setLore(ChatColor.WHITE + asReadableTime(time));
-
-            menuItem.setOnClick((e) -> {
+            MenuItemBuilder builder = new MenuItemBuilder();
+            builder.setMaterial(Material.STONE_AXE);
+            builder.setName(ChatColor.GOLD + reason);
+            builder.setLore(ChatColor.WHITE + asReadableTime(time));
+            builder.addListener(e -> {
                 User user = PunishPlugin.getEssentials().getUser(player);
                 LocalDateTime ldt = LocalDateTime.now().plus(time, ChronoUnit.MILLIS);
                 Bukkit.getBanList(Type.NAME).addBan(player.getName(), reason, Date.from(ldt.atZone(ZoneId.systemDefault()).toInstant()), null);
@@ -52,7 +61,8 @@ public class MenuLoader {
                 e.getPlayer().closeInventory();
             });
 
-            menu.addMenuItem(menuItem, slot);
+            MenuItem menuItem = builder.build();
+            menu.addItem(slot, menuItem);
 
             slot++;
 
@@ -62,25 +72,25 @@ public class MenuLoader {
     }
 
     public Menu loadKickMenu(Player player, FileConfiguration config) {
-        ClickHandler.removeAll();
-
-        Menu menu = new Menu("Kick Options");
+        Menu menu = new Menu(plugin, "Kick", 3);
+        menu.fill(new QuadFill(7, 8, 1, 14));
 
         List<String> stringList = config.getStringList("kick");
 
         int slot = 0;
         for (String reason : stringList) {
 
-            ItemStack itemStack = new ItemStack(Material.BOW );
-            MenuItem menuItem = new MenuItem(ChatColor.GOLD + reason, itemStack);
-
-            menuItem.setOnClick((e) -> {
+            MenuItemBuilder builder = new MenuItemBuilder();
+            builder.setMaterial(Material.BOW);
+            builder.setName(ChatColor.GOLD + reason);
+            builder.addListener(e -> {
                 player.kickPlayer(reason);
                 e.getPlayer().sendMessage(ChatColor.GOLD + "Kicked " + player.getName() + " for " + reason);
                 e.getPlayer().closeInventory();
             });
 
-            menu.addMenuItem(menuItem, slot);
+            MenuItem menuItem = builder.build();
+            menu.addItem(slot, menuItem);
 
             slot++;
 
@@ -90,9 +100,8 @@ public class MenuLoader {
     }
 
     public Menu loadMuteMenu(Player player, FileConfiguration config) {
-        ClickHandler.removeAll();
-
-        Menu menu = new Menu("Mute Options");
+        Menu menu = new Menu(plugin, "Mute", 3);
+        menu.fill(new QuadFill(7, 8, 1, 14));
 
         List<String> stringList = config.getStringList("mute");
 
@@ -104,30 +113,31 @@ public class MenuLoader {
             String timeString = parts[1].trim();
             final long time = getTime(timeString);
             final String readableTime = asReadableTime(time);
-            
-            ItemStack itemStack = new ItemStack(Material.MUSHROOM_SOUP);
-            MenuItem menuItem = new MenuItem(ChatColor.GOLD + reason, itemStack);
-            menuItem.setLore(ChatColor.WHITE + readableTime);
 
-            menuItem.setOnClick((e) -> {
+            MenuItemBuilder builder = new MenuItemBuilder();
+            builder.setMaterial(Material.MUSHROOM_SOUP);
+            builder.setName(ChatColor.GOLD + reason);
+            builder.setLore(ChatColor.WHITE + readableTime);
+            builder.addListener(e -> {
                 User user = PunishPlugin.getEssentials().getUser(player);
                 if (!user.getMuted()) {
                     user.setMuteTimeout(System.currentTimeMillis() + time);
                     user.setMuted(true);
                     user.sendMessage(ChatColor.RED + "You have been muted for " + readableTime);
                 } else {
-                    
+
                     long timeLeft = user.getMuteTimeout() - System.currentTimeMillis();
-                    
+
                     e.getPlayer().sendMessage(ChatColor.RED + "That player is already muted. (" + asReadableTime(timeLeft) + " left)");
                     return;
                 }
-                
+
                 e.getPlayer().sendMessage(ChatColor.GOLD + "Muted " + user.getName() + " for " + readableTime);
                 e.getPlayer().closeInventory();
             });
 
-            menu.addMenuItem(menuItem, slot);
+            MenuItem menuItem = builder.build();
+            menu.addItem(slot, menuItem);
 
             slot++;
 
@@ -180,7 +190,7 @@ public class MenuLoader {
         long hours = x % 24;
         x /= 24;
         long days = x;
-        
+
         StringBuilder builder = new StringBuilder();
 
         if (days > 0) {
