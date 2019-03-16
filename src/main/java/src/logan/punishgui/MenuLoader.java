@@ -20,6 +20,9 @@ import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
+
+import static logan.punishgui.PunishPlugin.getInstance;
 
 /**
  *
@@ -27,14 +30,88 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class MenuLoader {
 
-    private JavaPlugin plugin;
+    private static final int OPEN_DELAY = 10; // ticks
 
-    public MenuLoader(JavaPlugin plugin) {
-        this.plugin = plugin;
+    /** Opens a punishment menu containing items
+    representing the types of punishments to perform.
+    @param player The player that will get punished.
+    @return The punishment menu. */
+    public static void openPunishMenu(Player punisher, Player player) {
+
+        /* the api is poorly coded so using multiple builders for
+        different items is necessary at the moment */
+        MenuItemBuilder muteItemBuilder = new MenuItemBuilder();
+        MenuItemBuilder kickItemBuilder = new MenuItemBuilder();
+        MenuItemBuilder banItemBuilder = new MenuItemBuilder();
+
+        // Mute menu item
+        muteItemBuilder.setMaterial(Material.APPLE);
+        muteItemBuilder.setName(ChatColor.YELLOW + "Mute");
+        muteItemBuilder.addListener(event -> {
+
+            event.getPlayer().closeInventory();
+
+            Menu muteMenu = loadMuteMenu(player, getInstance().getConfig());
+
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    muteMenu.show(punisher);
+                }
+            }.runTaskLater(getInstance(), OPEN_DELAY);
+        });
+
+        MenuItem muteItem = muteItemBuilder.build();
+
+        // Kick menu item
+        kickItemBuilder.setMaterial(Material.ARROW);
+        kickItemBuilder.setName(ChatColor.YELLOW + "Kick");
+        kickItemBuilder.addListener(event -> {
+
+            event.getPlayer().closeInventory();
+            
+            Menu kickMenu = loadKickMenu(player, getInstance().getConfig());
+
+            new BukkitRunnable() {
+                @Override
+                public void run() {          
+                    kickMenu.show(punisher);
+                }
+            }.runTaskLater(getInstance(), OPEN_DELAY);
+        });
+
+        MenuItem kickItem = kickItemBuilder.build();
+
+        // Ban menu item
+        banItemBuilder.setMaterial(Material.APPLE);
+        banItemBuilder.setName(ChatColor.RED + "Ban");
+        banItemBuilder.addListener(event -> {
+
+            event.getPlayer().closeInventory();
+            
+            Menu banMenu = loadBanMenu(player, getInstance().getConfig());
+
+            new BukkitRunnable() {
+                @Override
+                public void run() {          
+                    banMenu.show(punisher);
+                }
+            }.runTaskLater(getInstance(), OPEN_DELAY);
+        });
+
+        MenuItem banItem = banItemBuilder.build();
+
+        // Create the menu and add items to it
+        Menu menu = new Menu(getInstance(), "Punish " + player.getName(), 1);
+        menu.addItem(0, muteItem);
+        menu.addItem(1, kickItem);
+        menu.addItem(2, banItem);
+
+        menu.show(punisher);
     }
 
-    public Menu loadBanMenu(Player player, FileConfiguration config) {
-        Menu menu = new Menu(plugin, "Ban", 3);
+    public static Menu loadBanMenu(Player player, FileConfiguration config) {
+        Menu menu = new Menu(getInstance(), "Ban", 3); 
         menu.fill(new QuadFill(7, 8, 1, 14));
 
         List<String> stringList = config.getStringList("ban");
@@ -71,8 +148,8 @@ public class MenuLoader {
         return menu;
     }
 
-    public Menu loadKickMenu(Player player, FileConfiguration config) {
-        Menu menu = new Menu(plugin, "Kick", 3);
+    public static Menu loadKickMenu(Player player, FileConfiguration config) {
+        Menu menu = new Menu(getInstance(), "Kick", 3);
         menu.fill(new QuadFill(7, 8, 1, 14));
 
         List<String> stringList = config.getStringList("kick");
@@ -99,8 +176,8 @@ public class MenuLoader {
         return menu;
     }
 
-    public Menu loadMuteMenu(Player player, FileConfiguration config) {
-        Menu menu = new Menu(plugin, "Mute", 3);
+    public static Menu loadMuteMenu(Player player, FileConfiguration config) {
+        Menu menu = new Menu(getInstance(), "Mute", 3);
         menu.fill(new QuadFill(7, 8, 1, 14));
 
         List<String> stringList = config.getStringList("mute");
@@ -146,7 +223,7 @@ public class MenuLoader {
         return menu;
     }
 
-    private long getTime(String timeString) {
+    private static long getTime(String timeString) {
         Pattern pattern = Pattern.compile("\\d+\\D{1}");
         Matcher matcher = pattern.matcher(timeString);
 
@@ -180,7 +257,7 @@ public class MenuLoader {
         return timeout;
     }
 
-    private String asReadableTime(long millis) {
+    private static String asReadableTime(long millis) {
 
         long x = millis / 1000;
         long seconds = x % 60;

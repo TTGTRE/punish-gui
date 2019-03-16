@@ -12,6 +12,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import logan.punishgui.HelpCommand;
+import logan.punishgui.PunishCommand;
 
 /**
  *
@@ -19,24 +20,30 @@ import logan.punishgui.HelpCommand;
  */
 public class PunishPlugin extends JavaPlugin {
 
-    private MenuLoader menuLoader;
+    private static PunishPlugin instance;
+
     private static Essentials essentials;
 
     public static final String HELP_PERM = "punishgui.help";
+    public static final String PUNISH_PERM = "punish.gui";
     public static final String MUTE_PERM = "punishgui.mute";
     public static final String KICK_PERM = "punishgui.kick";
     public static final String BAN_PERM = "punishgui.ban";
     public static final String RELOAD_PERM = "punishgui.reload";
     
     private HelpCommand helpCommand;
+    private PunishCommand punishCommand;
 
     @Override
     public void onEnable() {
+
+        instance = this;
+
         saveDefaultConfig();
         essentials = (Essentials) Bukkit.getPluginManager().getPlugin("Essentials");
-        menuLoader = new MenuLoader(this);
 
         helpCommand = new HelpCommand();
+        punishCommand = new PunishCommand();
         
         getLogger().info(getName() + " enabled.");
     }
@@ -58,6 +65,10 @@ public class PunishPlugin extends JavaPlugin {
 
         if (label.equalsIgnoreCase("punishgui")) {
             helpCommand.onCommand(player, command, label, args);
+        }
+
+        if (label.equalsIgnoreCase("punish")) {
+            punishCommand.onCommand(player, command, label, args);
         }
 
         if (label.equalsIgnoreCase("punishreload")) {
@@ -87,7 +98,7 @@ public class PunishPlugin extends JavaPlugin {
                 return true;
             }
 
-            menuLoader.loadMuteMenu(punishedPlayer, getConfig()).show(player);
+            MenuLoader.loadMuteMenu(punishedPlayer, getConfig()).show(player);
             
         } else if (args.length != 1) {
             return false;
@@ -107,7 +118,7 @@ public class PunishPlugin extends JavaPlugin {
                 return true;
             }
 
-            menuLoader.loadKickMenu(punishedPlayer, getConfig()).show(player);
+            MenuLoader.loadKickMenu(punishedPlayer, getConfig()).show(player);
             
         } else if (args.length != 1) {
             return false;
@@ -127,7 +138,7 @@ public class PunishPlugin extends JavaPlugin {
                 return true;
             }
 
-            menuLoader.loadBanMenu(punishedPlayer, getConfig()).show(player);
+            MenuLoader.loadBanMenu(punishedPlayer, getConfig()).show(player);
             
         }
 
@@ -136,6 +147,10 @@ public class PunishPlugin extends JavaPlugin {
 
     public static Essentials getEssentials() {
         return essentials;
+    }
+
+    public static PunishPlugin getInstance() {
+        return instance;
     }
 
 }

@@ -7,6 +7,10 @@ commands:
   punishgui:
     description: Show plugin commands.
     permission: punishgui.help
+  punish:
+    description: Open the punishment GUi.
+    permission: punish.gui
+    usage: /punish <player>
   mutegui:
     description: Mute a player via GUI.
     permission: punishgui.mute
