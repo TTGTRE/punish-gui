@@ -8,7 +8,7 @@ commands:
     description: Show plugin commands.
     permission: punishgui.help
   punish:
-    description: Open the punishment GUi.
+    description: Open the punishment GUI.
     permission: punish.gui
     usage: /punish <player>
   mutegui:
