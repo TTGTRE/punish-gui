@@ -11,6 +11,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import logan.punishgui.HelpCommand;
+
 /**
  *
  * @author Tre Logan
@@ -20,16 +22,21 @@ public class PunishPlugin extends JavaPlugin {
     private MenuLoader menuLoader;
     private static Essentials essentials;
 
+    public static final String HELP_PERM = "punishgui.help";
     public static final String MUTE_PERM = "punishgui.mute";
     public static final String KICK_PERM = "punishgui.kick";
     public static final String BAN_PERM = "punishgui.ban";
     public static final String RELOAD_PERM = "punishgui.reload";
     
+    private HelpCommand helpCommand;
+
     @Override
     public void onEnable() {
         saveDefaultConfig();
         essentials = (Essentials) Bukkit.getPluginManager().getPlugin("Essentials");
         menuLoader = new MenuLoader(this);
+
+        helpCommand = new HelpCommand();
         
         getLogger().info(getName() + " enabled.");
     }
@@ -48,6 +55,10 @@ public class PunishPlugin extends JavaPlugin {
         }
 
         Player player = (Player) sender;
+
+        if (label.equalsIgnoreCase("punishgui")) {
+            helpCommand.onCommand(player, command, label, args);
+        }
 
         if (label.equalsIgnoreCase("punishreload")) {
 
@@ -118,8 +129,6 @@ public class PunishPlugin extends JavaPlugin {
 
             menuLoader.loadBanMenu(punishedPlayer, getConfig()).show(player);
             
-        } else if (args.length != 1) {
-            return false;
         }
 
         return true;
