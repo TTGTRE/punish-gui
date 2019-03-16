@@ -25,12 +25,12 @@ public class HelpCommandTest {
         Command command = mock(Command.class);
 
         assertTrue(helpCommand.onCommand(sender, command, "punishgui", new String[0]));
-        verify(sender, atMost(4)).sendMessage(anyString());
+        verify(sender, atMost(5)).sendMessage(anyString());
 
         assertFalse(helpCommand.onCommand(sender, command, "bogus", new String[0]));
-        verify(sender, atMost(4)).sendMessage(anyString());
+        verify(sender, atMost(5)).sendMessage(anyString());
 
         assertFalse(helpCommand.onCommand(sender, command, "punishgui", new String[1]));
-        verify(sender, atMost(4)).sendMessage(anyString());
+        verify(sender, atMost(5)).sendMessage(anyString());
     }
 }

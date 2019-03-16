@@ -20,6 +20,7 @@ public class HelpCommand implements CommandExecutor {
             sender.sendMessage(ChatColor.GRAY + "/mutegui <player> (Opens the mute GUI)");
             sender.sendMessage(ChatColor.GRAY + "/kickgui <player> (Opens the kick GUI)");
             sender.sendMessage(ChatColor.GRAY + "/bangui <player> (Opens the ban GUI)");
+            sender.sendMessage(ChatColor.GRAY + "/punishreload (Reload config)");
             return true;
         }
 

@@ -4,6 +4,9 @@ version: 1.0
 author: Tre
 depend: [Essentials]
 commands:
+  punishgui:
+    description: Show plugin commands.
+    permission: punishgui.help
   mutegui:
     description: Mute a player via GUI.
     permission: punishgui.mute
