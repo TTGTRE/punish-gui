@@ -114,6 +114,8 @@ public class MenuLoader {
 
         List<String> stringList = config.getStringList("ban");
 
+        MenuItemBuilder builder = new MenuItemBuilder();
+
         int slot = 0;
         for (String string : stringList) {
 
@@ -123,7 +125,6 @@ public class MenuLoader {
             final long time = getTime(timeString);
             final String readableTime = asReadableTime(time);
 
-            MenuItemBuilder builder = new MenuItemBuilder();
             builder.setMaterial(Material.STONE_AXE);
             builder.setName(ChatColor.GOLD + reason);
             builder.setLore(ChatColor.WHITE + asReadableTime(time));
@@ -152,10 +153,11 @@ public class MenuLoader {
 
         List<String> stringList = config.getStringList("kick");
 
+        MenuItemBuilder builder = new MenuItemBuilder();
+
         int slot = 0;
         for (String reason : stringList) {
 
-            MenuItemBuilder builder = new MenuItemBuilder();
             builder.setMaterial(Material.BOW);
             builder.setName(ChatColor.GOLD + reason);
             builder.addListener(e -> {
@@ -180,6 +182,8 @@ public class MenuLoader {
 
         List<String> stringList = config.getStringList("mute");
 
+        MenuItemBuilder builder = new MenuItemBuilder();
+
         int slot = 0;
         for (String string : stringList) {
 
@@ -189,7 +193,6 @@ public class MenuLoader {
             final long time = getTime(timeString);
             final String readableTime = asReadableTime(time);
 
-            MenuItemBuilder builder = new MenuItemBuilder();
             builder.setMaterial(Material.MUSHROOM_SOUP);
             builder.setName(ChatColor.GOLD + reason);
             builder.setLore(ChatColor.WHITE + readableTime);
