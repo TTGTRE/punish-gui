@@ -5,19 +5,19 @@ author: Tre
 depend: [Essentials]
 commands:
   punishgui:
-    description: Open the punishment GUI.
+    description: Open general punish menu.
     permission: punishgui.punish
     usage: '§c/punish <player>'
   mutegui:
-    description: Mute a player via GUI.
+    description: Open the mute menu.
     permission: punishgui.mute
     usage: '§c/mutegui <player>'
   kickgui:
-    description: Kick a player via GUI.
+    description: Open the kick menu.
     permission: punishgui.kick
     usage: '§c/kickgui <player>'
   bangui:
-    description: Ban a player via GUI.
+    description: Open the ban menu.
     permission: punishgui.ban
     usage: '§c/bangui <player>'
   punishreload:
