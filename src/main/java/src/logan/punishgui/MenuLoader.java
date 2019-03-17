@@ -40,14 +40,12 @@ public class MenuLoader {
 
         /* the api is poorly coded so using multiple builders for
         different items is necessary at the moment */
-        MenuItemBuilder muteItemBuilder = new MenuItemBuilder();
-        MenuItemBuilder kickItemBuilder = new MenuItemBuilder();
-        MenuItemBuilder banItemBuilder = new MenuItemBuilder();
+        MenuItemBuilder itemBuilder = new MenuItemBuilder();
 
         // Mute menu item
-        muteItemBuilder.setMaterial(Material.HOPPER);
-        muteItemBuilder.setName(ChatColor.YELLOW + "Mute");
-        muteItemBuilder.addListener(event -> {
+        itemBuilder.setMaterial(Material.HOPPER);
+        itemBuilder.setName(ChatColor.YELLOW + "Mute");
+        itemBuilder.addListener(event -> {
 
             event.getPlayer().closeInventory();
 
@@ -61,12 +59,12 @@ public class MenuLoader {
             }.runTaskLater(getInstance(), OPEN_DELAY);
         });
 
-        MenuItem muteItem = muteItemBuilder.build();
+        MenuItem muteItem = itemBuilder.build();
 
         // Kick menu item
-        kickItemBuilder.setMaterial(Material.ARROW);
-        kickItemBuilder.setName(ChatColor.YELLOW + "Kick");
-        kickItemBuilder.addListener(event -> {
+        itemBuilder.setMaterial(Material.ARROW);
+        itemBuilder.setName(ChatColor.YELLOW + "Kick");
+        itemBuilder.addListener(event -> {
 
             event.getPlayer().closeInventory();
             
@@ -80,12 +78,12 @@ public class MenuLoader {
             }.runTaskLater(getInstance(), OPEN_DELAY);
         });
 
-        MenuItem kickItem = kickItemBuilder.build();
+        MenuItem kickItem = itemBuilder.build();
 
         // Ban menu item
-        banItemBuilder.setMaterial(Material.BEDROCK);
-        banItemBuilder.setName(ChatColor.RED + "Ban");
-        banItemBuilder.addListener(event -> {
+        itemBuilder.setMaterial(Material.BEDROCK);
+        itemBuilder.setName(ChatColor.RED + "Ban");
+        itemBuilder.addListener(event -> {
 
             event.getPlayer().closeInventory();
             
@@ -99,7 +97,7 @@ public class MenuLoader {
             }.runTaskLater(getInstance(), OPEN_DELAY);
         });
 
-        MenuItem banItem = banItemBuilder.build();
+        MenuItem banItem = itemBuilder.build();
 
         // Create the menu and add items to it
         Menu menu = new Menu(getInstance(), "Punish " + player.getName(), 1);
