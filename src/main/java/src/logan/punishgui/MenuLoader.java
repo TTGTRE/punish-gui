@@ -83,7 +83,7 @@ public class MenuLoader {
         MenuItem kickItem = kickItemBuilder.build();
 
         // Ban menu item
-        banItemBuilder.setMaterial(Material.FIRE);
+        banItemBuilder.setMaterial(Material.BEDROCK);
         banItemBuilder.setName(ChatColor.RED + "Ban");
         banItemBuilder.addListener(event -> {
 
