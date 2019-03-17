@@ -44,7 +44,7 @@ public class MenuLoader {
 
         // Mute menu item
         itemBuilder.setMaterial(Material.HOPPER);
-        itemBuilder.setName(ChatColor.YELLOW + "Mute");
+        itemBuilder.setName(ChatColor.YELLOW + "Mute Options");
         itemBuilder.addListener(event -> {
 
             event.getPlayer().closeInventory();
@@ -63,7 +63,7 @@ public class MenuLoader {
 
         // Kick menu item
         itemBuilder.setMaterial(Material.ARROW);
-        itemBuilder.setName(ChatColor.YELLOW + "Kick");
+        itemBuilder.setName(ChatColor.YELLOW + "Kick Options");
         itemBuilder.addListener(event -> {
 
             event.getPlayer().closeInventory();
@@ -82,7 +82,7 @@ public class MenuLoader {
 
         // Ban menu item
         itemBuilder.setMaterial(Material.BEDROCK);
-        itemBuilder.setName(ChatColor.RED + "Ban");
+        itemBuilder.setName(ChatColor.RED + "Ban Options");
         itemBuilder.addListener(event -> {
 
             event.getPlayer().closeInventory();
@@ -101,9 +101,11 @@ public class MenuLoader {
 
         // Create the menu and add items to it
         Menu menu = new Menu(getInstance(), "Punish " + player.getName(), 1);
-        menu.addItem(0, muteItem);
-        menu.addItem(1, kickItem);
-        menu.addItem(2, banItem);
+
+        // only show menu items the punisher can use
+        if (punisher.hasPermission("punishgui.mute")) menu.addItem(0, muteItem);
+        if (punisher.hasPermission("punishgui.kick")) menu.addItem(1, kickItem);
+        if (punisher.hasPermission("punishgui.ban")) menu.addItem(2, banItem);
 
         menu.show(punisher);
     }
@@ -197,18 +199,11 @@ public class MenuLoader {
             builder.setName(ChatColor.GOLD + reason);
             builder.setLore(ChatColor.WHITE + readableTime);
             builder.addListener(e -> {
+                
                 User user = PunishPlugin.getEssentials().getUser(player);
-                if (!user.getMuted()) {
-                    user.setMuteTimeout(System.currentTimeMillis() + time);
-                    user.setMuted(true);
-                    user.sendMessage(ChatColor.RED + "You have been muted for " + readableTime);
-                } else {
-
-                    long timeLeft = user.getMuteTimeout() - System.currentTimeMillis();
-
-                    e.getPlayer().sendMessage(ChatColor.RED + "That player is already muted. (" + asReadableTime(timeLeft) + " left)");
-                    return;
-                }
+                user.setMuteTimeout(System.currentTimeMillis() + time);
+                user.setMuted(true);
+                user.sendMessage(ChatColor.RED + "You have been muted for " + readableTime);
 
                 e.getPlayer().sendMessage(ChatColor.GOLD + "Muted " + user.getName() + " for " + readableTime);
                 e.getPlayer().closeInventory();

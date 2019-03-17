@@ -12,9 +12,15 @@ A Minecraft plugin that allows you to customize a GUI of punishments to make iss
 |`bangui <player>`|Opens the ban menu for banning a player|`punishgui.ban`|
 
 ## To-do
-- Usage text for mutegui, kickgui, and bangui are printed in white instead of red.
 - Refactor other parts of the plugin to make it easier to maintain.
-- ~~Fix `MenuItemBuilder` using same instance of the item stack it's modifying  
+- ~~Only create menu items for players with permissions to issue punishment  
+(E.g. A player shouldn't have the ban menu item if they don't have permission to ban).~~
+
+## Done
+- Usage text for mutegui, kickgui, and bangui are printed in white instead of red.
+- Fix `MenuItemBuilder` using same instance of the item stack it's modifying  
 preventing the developer from using the same `MenuItemBuilder` for different  
-menu items.~~
+menu items.
+- Fix bug where if the punisher tries to mute a player twice the clicked  
+menu item is dropped.
 

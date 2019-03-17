@@ -11,7 +11,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import logan.punishgui.HelpCommand;
 import logan.punishgui.PunishCommand;
 
 /**
@@ -24,14 +23,6 @@ public class PunishPlugin extends JavaPlugin {
 
     private static Essentials essentials;
 
-    public static final String HELP_PERM = "punishgui.help";
-    public static final String PUNISH_PERM = "punish.gui";
-    public static final String MUTE_PERM = "punishgui.mute";
-    public static final String KICK_PERM = "punishgui.kick";
-    public static final String BAN_PERM = "punishgui.ban";
-    public static final String RELOAD_PERM = "punishgui.reload";
-    
-    private HelpCommand helpCommand;
     private PunishCommand punishCommand;
 
     @Override
@@ -42,7 +33,6 @@ public class PunishPlugin extends JavaPlugin {
         saveDefaultConfig();
         essentials = (Essentials) Bukkit.getPluginManager().getPlugin("Essentials");
 
-        helpCommand = new HelpCommand();
         punishCommand = new PunishCommand();
         
         getLogger().info(getName() + " enabled.");
@@ -64,34 +54,18 @@ public class PunishPlugin extends JavaPlugin {
         Player player = (Player) sender;
 
         if (label.equalsIgnoreCase("punishgui")) {
-            helpCommand.onCommand(player, command, label, args);
-            return true;
-        }
-
-        if (label.equalsIgnoreCase("punish")) {
-            punishCommand.onCommand(player, command, label, args);
-            return true;
+            return punishCommand.onCommand(player, command, label, args);
         }
 
         if (label.equalsIgnoreCase("punishreload")) {
 
-            if (!player.hasPermission(RELOAD_PERM)) {
-                player.sendMessage(ChatColor.RED + "No permission.");
-                return true;
-            }
-
             reloadConfig();
-
             player.sendMessage("Reloaded " + getName() + ".");
+
             return true;
         }
         
         if (label.equalsIgnoreCase("mutegui") && args.length == 1) {
-
-            if (!player.hasPermission(MUTE_PERM)) {
-                player.sendMessage(ChatColor.RED + "No permission.");
-                return true;
-            }
 
             Player punishedPlayer = Bukkit.getPlayer(args[0]);
 
@@ -108,11 +82,6 @@ public class PunishPlugin extends JavaPlugin {
 
         if (label.equalsIgnoreCase("kickgui") && args.length == 1) {
 
-            if (!player.hasPermission(KICK_PERM)) {
-                player.sendMessage(ChatColor.RED + "No permission.");
-                return true;
-            }
-
             Player punishedPlayer = Bukkit.getPlayer(args[0]);
 
             if (Objects.isNull(punishedPlayer)) {
@@ -127,11 +96,6 @@ public class PunishPlugin extends JavaPlugin {
         }
 
         if (label.equalsIgnoreCase("bangui") && args.length == 1) {
-
-            if (!player.hasPermission(BAN_PERM)) {
-                player.sendMessage(ChatColor.RED + "No permission.");
-                return true;
-            }
 
             Player punishedPlayer = Bukkit.getPlayer(args[0]);
 

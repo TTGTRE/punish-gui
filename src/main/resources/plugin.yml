@@ -5,25 +5,22 @@ author: Tre
 depend: [Essentials]
 commands:
   punishgui:
-    description: Show plugin commands.
-    permission: punishgui.help
-  punish:
     description: Open the punishment GUI.
-    permission: punish.gui
-    usage: /punish <player>
+    permission: punishgui.punish
+    usage: '§c/punish <player>'
   mutegui:
     description: Mute a player via GUI.
     permission: punishgui.mute
-    usage: /mutegui <player>
+    usage: '§c/mutegui <player>'
   kickgui:
     description: Kick a player via GUI.
     permission: punishgui.kick
-    usage: /kickgui <player>
+    usage: '§c/kickgui <player>'
   bangui:
     description: Ban a player via GUI.
     permission: punishgui.ban
-    usage: /bangui <player>
+    usage: '§c/bangui <player>'
   punishreload:
     description: Reload the punish configuration.
     permission: punishgui.reload
-    usage: /punishreload
+    usage: '§c/punishreload'

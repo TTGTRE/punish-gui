@@ -15,22 +15,23 @@ public class PunishCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
-        if (!label.equalsIgnoreCase("punish")) return false;
+        if (!label.equalsIgnoreCase("punishgui")) return true;
 
+        // display commands
         if (args.length == 0) {
-            sender.sendMessage(ChatColor.RED + "Usage: /punish <player>");
-            return false;
-        }
-
-        if (!sender.hasPermission(PunishPlugin.PUNISH_PERM)) {
-            sender.sendMessage(ChatColor.RED + "No permission.");
-            return false;
+            sender.sendMessage(ChatColor.YELLOW + "PunishGUI:");
+            sender.sendMessage("/punishgui <player> - Open general punish menu");
+            sender.sendMessage("/mutegui <player> - Open the mute menu");
+            sender.sendMessage("/kickgui <player> - Open the kick menu");
+            sender.sendMessage("/bangui <player> - Open the ban menu");
+            sender.sendMessage("/punishreload - Reload config");
+            return true;
         }
 
         Player badPlayer = Bukkit.getPlayer(args[0]);
         if (badPlayer == null) {
             sender.sendMessage(ChatColor.RED + "Couldn't find player.");
-            return false;
+            return true;
         }
 
         MenuLoader.openPunishMenu((Player) sender, badPlayer);
