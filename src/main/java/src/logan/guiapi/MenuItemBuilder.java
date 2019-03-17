@@ -111,7 +111,7 @@ public final class MenuItemBuilder {
     }
 
     public final MenuItem build() {
-        return new MenuItem(itemStack, listener);
+        return new MenuItem(itemStack.clone(), listener);
     }
     
     private void setMetaProperty(Function<ItemMeta, ItemMeta> function) {
