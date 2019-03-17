@@ -45,7 +45,7 @@ public class MenuLoader {
         MenuItemBuilder banItemBuilder = new MenuItemBuilder();
 
         // Mute menu item
-        muteItemBuilder.setMaterial(Material.APPLE);
+        muteItemBuilder.setMaterial(Material.HOPPER);
         muteItemBuilder.setName(ChatColor.YELLOW + "Mute");
         muteItemBuilder.addListener(event -> {
 
@@ -83,7 +83,7 @@ public class MenuLoader {
         MenuItem kickItem = kickItemBuilder.build();
 
         // Ban menu item
-        banItemBuilder.setMaterial(Material.APPLE);
+        banItemBuilder.setMaterial(Material.FIRE);
         banItemBuilder.setName(ChatColor.RED + "Ban");
         banItemBuilder.addListener(event -> {
 

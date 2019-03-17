@@ -65,10 +65,12 @@ public class PunishPlugin extends JavaPlugin {
 
         if (label.equalsIgnoreCase("punishgui")) {
             helpCommand.onCommand(player, command, label, args);
+            return true;
         }
 
         if (label.equalsIgnoreCase("punish")) {
             punishCommand.onCommand(player, command, label, args);
+            return true;
         }
 
         if (label.equalsIgnoreCase("punishreload")) {
