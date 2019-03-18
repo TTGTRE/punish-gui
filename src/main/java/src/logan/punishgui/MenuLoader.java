@@ -12,7 +12,6 @@ import java.util.regex.Pattern;
 import logan.guiapi.Menu;
 import logan.guiapi.MenuItem;
 import logan.guiapi.MenuItemBuilder;
-import logan.guiapi.fill.QuadFill;
 import org.bukkit.BanList.Type;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -38,8 +37,6 @@ public class MenuLoader {
     @return The punishment menu. */
     public static void openPunishMenu(Player punisher, Player player) {
 
-        /* the api is poorly coded so using multiple builders for
-        different items is necessary at the moment */
         MenuItemBuilder itemBuilder = new MenuItemBuilder();
 
         // Mute menu item
@@ -48,7 +45,6 @@ public class MenuLoader {
         itemBuilder.addListener(event -> {
 
             event.getPlayer().closeInventory();
-
             Menu muteMenu = loadMuteMenu(player, getInstance().getConfig());
 
             new BukkitRunnable() {
@@ -112,7 +108,6 @@ public class MenuLoader {
 
     public static Menu loadBanMenu(Player player, FileConfiguration config) {
         Menu menu = new Menu(getInstance(), "Ban", 3); 
-        menu.fill(new QuadFill(7, 8, 1, 14));
 
         List<String> stringList = config.getStringList("ban");
 
@@ -151,7 +146,6 @@ public class MenuLoader {
 
     public static Menu loadKickMenu(Player player, FileConfiguration config) {
         Menu menu = new Menu(getInstance(), "Kick", 3);
-        menu.fill(new QuadFill(7, 8, 1, 14));
 
         List<String> stringList = config.getStringList("kick");
 
@@ -179,8 +173,8 @@ public class MenuLoader {
     }
 
     public static Menu loadMuteMenu(Player player, FileConfiguration config) {
+
         Menu menu = new Menu(getInstance(), "Mute", 3);
-        menu.fill(new QuadFill(7, 8, 1, 14));
 
         List<String> stringList = config.getStringList("mute");
 
@@ -195,11 +189,11 @@ public class MenuLoader {
             final long time = getTime(timeString);
             final String readableTime = asReadableTime(time);
 
-            builder.setMaterial(Material.MUSHROOM_SOUP);
+            builder.setMaterial(Material.MUSHROOM_STEW);
             builder.setName(ChatColor.GOLD + reason);
             builder.setLore(ChatColor.WHITE + readableTime);
             builder.addListener(e -> {
-                
+
                 User user = PunishPlugin.getEssentials().getUser(player);
                 user.setMuteTimeout(System.currentTimeMillis() + time);
                 user.setMuted(true);
@@ -213,8 +207,7 @@ public class MenuLoader {
             menu.addItem(slot, menuItem);
 
             slot++;
-
-        }
+            }
 
         return menu;
     }

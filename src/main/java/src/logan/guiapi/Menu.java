@@ -1,10 +1,11 @@
 package logan.guiapi;
 
+import java.util.Vector;
 import java.util.HashMap;
 import java.util.Map;
-import logan.guiapi.fill.Filler;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -18,12 +19,13 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class Menu implements Listener {
 
     private String title;
-    private Inventory inventory;
     private int slots;
+    private Inventory inventory;
 
     private Map<Integer, MenuItem> menuItems = new HashMap<>();
 
     public Menu(JavaPlugin plugin, String title, int rows) {
+
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
 
         this.title = title;
@@ -32,12 +34,8 @@ public class Menu implements Listener {
     }
 
     public void show(Player player) {
-        menuItems.forEach((s, mi) -> inventory.setItem(s, mi.getItemStack()));
+        menuItems.forEach((s, mi) ->  inventory.setItem(s, mi.getItemStack()));
         player.openInventory(inventory);
-    }
-
-    public void fill(Filler fillPattern) {
-        fillPattern.fill(this);
     }
     
     public void addItem(int slot, MenuItem menuItem) {
@@ -69,6 +67,7 @@ public class Menu implements Listener {
                 .filter(s -> s == event.getSlot())
                 .forEach(s -> menuItems.get(s).onClick(new MenuItemClickEvent(event)));
 
+        HandlerList.unregisterAll(this);
     }
 
 }
