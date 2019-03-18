@@ -12,6 +12,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import logan.punishgui.PunishCommand;
+import logan.punishgui.PlayerClickListener;
 
 /**
  *
@@ -20,8 +21,12 @@ import logan.punishgui.PunishCommand;
 public class PunishPlugin extends JavaPlugin {
 
     private static PunishPlugin instance;
-
     private static Essentials essentials;
+
+    public static final String PUNISH_PERMISSION = "punishgui.punish";
+    public static final String MUTE_PERMISSION = "punishgui.mute";
+    public static final String KICK_PERMISSION = "punishgui.kick";
+    public static final String BAN_PERMISSION = "punishgui.ban";
 
     private PunishCommand punishCommand;
 
@@ -34,6 +39,9 @@ public class PunishPlugin extends JavaPlugin {
         essentials = (Essentials) Bukkit.getPluginManager().getPlugin("Essentials");
 
         punishCommand = new PunishCommand();
+
+        // register listeners
+        getServer().getPluginManager().registerEvents(new PlayerClickListener(), this);
         
         getLogger().info(getName() + " enabled.");
     }

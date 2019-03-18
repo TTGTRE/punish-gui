@@ -19,7 +19,7 @@ public class PunishCommand implements CommandExecutor {
 
         // display commands
         if (args.length == 0) {
-            sender.sendMessage(ChatColor.YELLOW + "PunishGUI:");
+            sender.sendMessage(ChatColor.RED + "PunishGUI:");
             sender.sendMessage("/punishgui <player> - Open general punish menu");
             sender.sendMessage("/mutegui <player> - Open the mute menu");
             sender.sendMessage("/kickgui <player> - Open the kick menu");
