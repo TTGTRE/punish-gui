@@ -1,6 +1,7 @@
 main: logan.punishgui.PunishPlugin
 name: PunishGUI
 version: 1.1
+api-version: 1.13
 author: Tre
 depend: [Essentials]
 commands:

@@ -35,8 +35,6 @@ public class PunishCommand implements CommandExecutor {
         }
 
         MenuLoader.openPunishMenu((Player) sender, badPlayer);
-        sender.sendMessage("Opened punishment menu for " + badPlayer.getName() + ".");
-
         return true;
     }
 }

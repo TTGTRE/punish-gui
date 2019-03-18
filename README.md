@@ -17,6 +17,9 @@ A Minecraft plugin that allows you to customize a GUI of punishments to make iss
 (E.g. A player shouldn't have the ban menu item if they don't have permission to ban).~~
 
 ## Done
+- Fix punishments sometimes punishing the wrong player depending on who the last  
+person punished was (Caused by listeners not being added for new menu).
+- Fix menus duplicating (Caused by adding listeners more than once).
 - Usage text for mutegui, kickgui, and bangui are printed in white instead of red.
 - Fix `MenuItemBuilder` using same instance of the item stack it's modifying  
 preventing the developer from using the same `MenuItemBuilder` for different  
