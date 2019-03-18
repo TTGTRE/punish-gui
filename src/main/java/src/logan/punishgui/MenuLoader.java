@@ -6,13 +6,11 @@ import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import logan.guiapi.Menu;
 import logan.guiapi.MenuItem;
 import logan.guiapi.MenuItemBuilder;
 import logan.punishgui.TimeUtil;
+import logan.punishgui.PunishPlugin;
 import org.bukkit.BanList.Type;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -21,8 +19,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
-
-import static logan.punishgui.PunishPlugin;;
 
 /**
  *
@@ -100,9 +96,9 @@ public class MenuLoader {
         Menu menu = new Menu(PunishPlugin.getInstance(), "Punish " + player.getName(), 1);
 
         // only add menu items the punisher can use
-        if (punisher.hasPermission("punishgui.mute")) menu.addItem(0, muteItem);
-        if (punisher.hasPermission("punishgui.kick")) menu.addItem(1, kickItem);
-        if (punisher.hasPermission("punishgui.ban")) menu.addItem(2, banItem);
+        if (punisher.hasPermission(PunishPlugin.MUTE_PERMISSION)) menu.addItem(0, muteItem);
+        if (punisher.hasPermission(PunishPlugin.KICK_PERMISSION)) menu.addItem(1, kickItem);
+        if (punisher.hasPermission(PunishPlugin.BAN_PERMISSION)) menu.addItem(2, banItem);
 
         menu.show(punisher);
     }

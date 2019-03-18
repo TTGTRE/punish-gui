@@ -17,6 +17,7 @@ A Minecraft plugin that allows you to customize a GUI of punishments to make iss
 (E.g. A player shouldn't have the ban menu item if they don't have permission to ban).~~
 
 ## Done
+- Implement right-click punishing functionality.
 - Fix punishments sometimes punishing the wrong player depending on who the last  
 person punished was (Caused by listeners not being added for new menu).
 - Fix menus duplicating (Caused by adding listeners more than once).
