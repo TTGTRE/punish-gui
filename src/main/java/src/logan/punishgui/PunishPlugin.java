@@ -11,9 +11,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import logan.punishgui.PunishCommand;
-import logan.punishgui.PlayerClickListener;
-
 /**
  *
  * @author Tre Logan
@@ -28,6 +25,8 @@ public class PunishPlugin extends JavaPlugin {
     public static final String KICK_PERMISSION = "punishgui.kick";
     public static final String BAN_PERMISSION = "punishgui.ban";
 
+    private static PunishConfiguration punishConfiguration;
+
     private PunishCommand punishCommand;
 
     @Override
@@ -37,6 +36,8 @@ public class PunishPlugin extends JavaPlugin {
 
         saveDefaultConfig();
         essentials = (Essentials) Bukkit.getPluginManager().getPlugin("Essentials");
+
+        punishConfiguration = new PunishConfiguration(getConfig());
 
         punishCommand = new PunishCommand();
 
@@ -68,6 +69,7 @@ public class PunishPlugin extends JavaPlugin {
         if (label.equalsIgnoreCase("punishreload")) {
 
             reloadConfig();
+            punishConfiguration.reload(getConfig());
             player.sendMessage("Reloaded " + getName() + ".");
 
             return true;
@@ -82,7 +84,7 @@ public class PunishPlugin extends JavaPlugin {
                 return true;
             }
 
-            MenuLoader.loadMuteMenu(punishedPlayer, getConfig()).show(player);
+            MenuLoader.openMuteMenu(player, punishedPlayer);
             
         } else if (args.length != 1) {
             return false;
@@ -97,7 +99,7 @@ public class PunishPlugin extends JavaPlugin {
                 return true;
             }
 
-            MenuLoader.loadKickMenu(punishedPlayer, getConfig()).show(player);
+            MenuLoader.openKickMenu(player, punishedPlayer);
             
         } else if (args.length != 1) {
             return false;
@@ -112,8 +114,7 @@ public class PunishPlugin extends JavaPlugin {
                 return true;
             }
 
-            MenuLoader.loadBanMenu(punishedPlayer, getConfig()).show(player);
-            
+            MenuLoader.openBanMenu(player, punishedPlayer);
         }
 
         return true;
@@ -127,4 +128,7 @@ public class PunishPlugin extends JavaPlugin {
         return instance;
     }
 
+    public static PunishConfiguration getPunishConfiguration() {
+        return punishConfiguration;
+    }
 }
