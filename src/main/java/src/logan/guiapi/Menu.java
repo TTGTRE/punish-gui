@@ -19,6 +19,8 @@ import org.bukkit.event.inventory.InventoryClickEvent;
  */
 public class Menu implements Listener {
 
+    private JavaPlugin plugin;
+
     private String title;
     private int slots;
     private Inventory inventory;
@@ -26,10 +28,7 @@ public class Menu implements Listener {
     private Map<Integer, MenuItem> menuItems = new HashMap<>();
 
     public Menu(JavaPlugin plugin, String title, int rows) {
-
-        plugin.getServer().getPluginManager().registerEvents(this, plugin);
-        System.out.println("Registered listeners for " + title + ".");
-
+        this.plugin = plugin;
         this.title = title;
         slots = rows * 9;
         inventory = Bukkit.createInventory(null, slots, title);
@@ -38,6 +37,7 @@ public class Menu implements Listener {
     public void show(Player player) {
         menuItems.forEach((s, mi) ->  inventory.setItem(s, mi.getItemStack()));
         player.openInventory(inventory);
+        plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
     
     public void addItem(int slot, MenuItem menuItem) {

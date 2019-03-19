@@ -26,7 +26,11 @@ import org.bukkit.scheduler.BukkitRunnable;
  */
 public class MenuLoader {
 
-    private static final int OPEN_DELAY = 10; // ticks
+    private static final int OPEN_DELAY = 5; // ticks
+
+    private static Menu muteMenu = new Menu(PunishPlugin.getInstance(), "Mute", 3);
+    private static Menu kickMenu = new Menu(PunishPlugin.getInstance(), "Kick", 3);
+    private static Menu banMenu = new Menu(PunishPlugin.getInstance(), "Ban", 3);
 
     /** Opens a punishment menu containing items
     representing the types of punishments to perform.
@@ -42,12 +46,11 @@ public class MenuLoader {
         itemBuilder.addListener(event -> {
 
             event.getPlayer().closeInventory();
-            Menu muteMenu = loadMuteMenu(player, PunishPlugin.getInstance().getConfig());
 
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    muteMenu.show(punisher);
+                    openMuteMenu(punisher, player);
                 }
             }.runTaskLater(PunishPlugin.getInstance(), OPEN_DELAY);
         });
@@ -60,13 +63,11 @@ public class MenuLoader {
         itemBuilder.addListener(event -> {
 
             event.getPlayer().closeInventory();
-            
-            Menu kickMenu = loadKickMenu(player, PunishPlugin.getInstance().getConfig());
 
             new BukkitRunnable() {
                 @Override
                 public void run() {          
-                    kickMenu.show(punisher);
+                    openKickMenu(punisher, player);
                 }
             }.runTaskLater(PunishPlugin.getInstance(), OPEN_DELAY);
         });
@@ -79,13 +80,11 @@ public class MenuLoader {
         itemBuilder.addListener(event -> {
 
             event.getPlayer().closeInventory();
-            
-            Menu banMenu = loadBanMenu(player, PunishPlugin.getInstance().getConfig());
 
             new BukkitRunnable() {
                 @Override
                 public void run() {          
-                    banMenu.show(punisher);
+                    openBanMenu(punisher, player);
                 }
             }.runTaskLater(PunishPlugin.getInstance(), OPEN_DELAY);
         });
@@ -101,109 +100,102 @@ public class MenuLoader {
         if (punisher.hasPermission(PunishPlugin.BAN_PERMISSION)) menu.addItem(2, banItem);
 
         menu.show(punisher);
-    }
+    } 
 
-    public static Menu loadMuteMenu(Player player, FileConfiguration config) {
-
-        Menu menu = new Menu(PunishPlugin.getInstance(), "Mute", 3);
-
-        List<String> stringList = config.getStringList("mute");
+    public static void openMuteMenu(Player punisher, Player receiver) {
 
         MenuItemBuilder builder = new MenuItemBuilder();
 
-        int slot = 0;
-        for (String string : stringList) {
+        List<Punishment> punishments = PunishPlugin.getPunishConfiguration().getMuteActions();
 
-            String[] parts = string.split("->");
-            String reason = parts[0].trim();
-            String timeString = parts[1].trim();
-            final long time = TimeUtil.getTime(timeString);
-            final String readableTime = TimeUtil.asReadableTime(time);
+        int slot = 0;
+        for (Punishment punishment : punishments) {
 
             builder.setMaterial(Material.MUSHROOM_STEW);
-            builder.setName(ChatColor.GOLD + reason);
-            builder.setLore(ChatColor.WHITE + readableTime);
-            builder.addListener(e -> {
+            builder.setName(ChatColor.GOLD + punishment.getReason());
+            builder.setLore(ChatColor.WHITE + punishment.getReadableDuration());
 
-                User user = PunishPlugin.getEssentials().getUser(player);
-                user.setMuteTimeout(System.currentTimeMillis() + time);
+            builder.addListener(event -> {
+
+                Player player = event.getPlayer();
+
+                User user = PunishPlugin.getEssentials().getUser(receiver);
+                user.setMuteTimeout(System.currentTimeMillis() + punishment.getDuration());
                 user.setMuted(true);
-                user.sendMessage(ChatColor.RED + "You have been muted for " + readableTime);
+                user.sendMessage(ChatColor.RED + "You have been muted for " + punishment.getReadableDuration());
 
-                e.getPlayer().sendMessage(ChatColor.GOLD + "Muted " + user.getName() + " for " + readableTime);
-                e.getPlayer().closeInventory();
+                player.sendMessage(ChatColor.GOLD + "Muted " + user.getName() + " for " + punishment.getReadableDuration());
+                player.closeInventory();
             });
 
             MenuItem menuItem = builder.build();
-            menu.addItem(slot, menuItem);
+            muteMenu.addItem(slot, menuItem);
 
             slot++;
         }
 
-        return menu;
+        muteMenu.show(punisher);
     }
 
-    public static Menu loadKickMenu(Player player, FileConfiguration config) {
-        Menu menu = new Menu(PunishPlugin.getInstance(), "Kick", 3);
-
-        List<String> stringList = config.getStringList("kick");
+    public static void openKickMenu(Player punisher, Player receiver) {
 
         MenuItemBuilder builder = new MenuItemBuilder();
 
+        List<Punishment> punishments = PunishPlugin.getInstance().getPunishConfiguration().getKickActions();
+
         int slot = 0;
-        for (String reason : stringList) {
+        for (Punishment punishment : punishments) {
 
             builder.setMaterial(Material.BOW);
-            builder.setName(ChatColor.GOLD + reason);
-            builder.addListener(e -> {
-                player.kickPlayer(reason);
-                e.getPlayer().sendMessage(ChatColor.GOLD + "Kicked " + player.getName() + " for " + reason);
-                e.getPlayer().closeInventory();
+            builder.setName(ChatColor.GOLD + punishment.getReason());
+            builder.addListener(event -> {
+
+                Player player = event.getPlayer();
+
+                receiver.kickPlayer(punishment.getReason());
+                player.sendMessage(ChatColor.GOLD + "Kicked " + player.getName() + " for " + punishment.getReason());
+                player.closeInventory();
             });
 
             MenuItem menuItem = builder.build();
-            menu.addItem(slot, menuItem);
+            kickMenu.addItem(slot, menuItem);
 
             slot++;
         }
 
-        return menu;
+        kickMenu.show(punisher);
     }
 
-    public static Menu loadBanMenu(Player player, FileConfiguration config) {
-        Menu menu = new Menu(PunishPlugin.getInstance(), "Ban", 3); 
-
-        List<String> stringList = config.getStringList("ban");
+    public static void openBanMenu(Player punisher, Player receiver) {
 
         MenuItemBuilder builder = new MenuItemBuilder();
 
-        int slot = 0;
-        for (String string : stringList) {
+        List<Punishment> punishments = PunishPlugin.getInstance().getPunishConfiguration().getBanActions();
 
-            String[] parts = string.split("->");
-            String reason = parts[0].trim();
-            String timeString = parts[1].trim();
-            final long time = TimeUtil.getTime(timeString);
-            final String readableTime = TimeUtil.asReadableTime(time);
+        int slot = 0;
+        for (Punishment punishment : punishments) {
 
             builder.setMaterial(Material.STONE_AXE);
-            builder.setName(ChatColor.GOLD + reason);
-            builder.setLore(ChatColor.WHITE + TimeUtil.asReadableTime(time));
-            builder.addListener(e -> {
-                User user = PunishPlugin.getEssentials().getUser(player);
-                LocalDateTime ldt = LocalDateTime.now().plus(time, ChronoUnit.MILLIS);
-                Bukkit.getBanList(Type.NAME).addBan(player.getName(), reason, Date.from(ldt.atZone(ZoneId.systemDefault()).toInstant()), null);
-                player.kickPlayer(ChatColor.RED + "Banned: " + reason);
-                e.getPlayer().sendMessage(ChatColor.GOLD + "Banned " + user.getName() + " for " + readableTime + " for " + reason);
-                e.getPlayer().closeInventory();
+            builder.setName(ChatColor.GOLD + punishment.getReason());
+            builder.setLore(ChatColor.WHITE + punishment.getReadableDuration());
+            builder.addListener(event -> {
+
+                Player player = event.getPlayer();
+
+                User user = PunishPlugin.getEssentials().getUser(receiver);
+                LocalDateTime ldt = LocalDateTime.now().plus(punishment.getDuration(), ChronoUnit.MILLIS);
+                Bukkit.getBanList(Type.NAME).addBan(receiver.getName(), punishment.getReason(), Date.from(ldt.atZone(ZoneId.systemDefault()).toInstant()), null);
+                receiver.kickPlayer(ChatColor.RED + "Banned: " + punishment.getReason());
+                player.sendMessage(ChatColor.GOLD + "Banned " + user.getName() + " for " + punishment.getReadableDuration() + " for " + punishment.getReason());
+                player.closeInventory();
             });
 
             MenuItem menuItem = builder.build();
-            menu.addItem(slot, menuItem);
+            banMenu.addItem(slot, menuItem);
 
             slot++;
         }
 
-        return menu;
+        banMenu.show(punisher);
     }
 }
