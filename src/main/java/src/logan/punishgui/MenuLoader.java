@@ -26,7 +26,7 @@ import org.bukkit.scheduler.BukkitRunnable;
  */
 public class MenuLoader {
 
-    private static final int OPEN_DELAY = 10; // ticks
+    private static final int OPEN_DELAY = 5; // ticks
 
     private static Menu muteMenu = new Menu(PunishPlugin.getInstance(), "Mute", 3);
     private static Menu kickMenu = new Menu(PunishPlugin.getInstance(), "Kick", 3);
