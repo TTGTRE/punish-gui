@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import logan.punishgui.TimeUtil;
-import logan.punishgui.MuteAction;
 
 public class PunishConfiguration {
 
