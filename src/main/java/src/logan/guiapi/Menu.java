@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.Vector;
 import java.util.HashMap;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.event.HandlerList;
@@ -54,6 +55,16 @@ public class Menu implements Listener {
 
     public Inventory getInventory() {
         return inventory;
+    }
+
+    public void fill(Material material) {
+        MenuItemBuilder builder = new MenuItemBuilder();
+        builder.setMaterial(material);
+        builder.clearName();
+
+        for (int i = 0; i < slots; i++) {
+           this.addItem(i, builder.build());
+        }
     }
 
     @EventHandler

@@ -32,6 +32,12 @@ public class MenuLoader {
     private static Menu kickMenu = new Menu(PunishPlugin.getInstance(), "Kick", 3);
     private static Menu banMenu = new Menu(PunishPlugin.getInstance(), "Ban", 3);
 
+    static {
+        muteMenu.fill(Material.WHITE_STAINED_GLASS_PANE);
+        kickMenu.fill(Material.WHITE_STAINED_GLASS_PANE);
+        banMenu.fill(Material.WHITE_STAINED_GLASS_PANE);
+    }
+
     /** Opens a punishment menu containing items
     representing the types of punishments to perform.
     @param player The player that will get punished.
@@ -93,6 +99,7 @@ public class MenuLoader {
 
         // Create the menu and add items to it
         Menu menu = new Menu(PunishPlugin.getInstance(), "Punish " + player.getName(), 1);
+        menu.fill(Material.WHITE_STAINED_GLASS_PANE);
 
         // only add menu items the punisher can use
         if (punisher.hasPermission(PunishPlugin.MUTE_PERMISSION)) menu.addItem(0, muteItem);
